@@ -5,6 +5,7 @@
 #include <Windows.h>
 #else
 #include <ucontext.h>
+#include <stdint.h>
 #endif
 #include "localstorage.h"
 
@@ -39,17 +40,19 @@ private:
 	void * m_ud;
 	status_t m_status;
 	bool m_Exit;
-#ifdef _WIN32
-	HANDLE m_fiber;
 	int m_initTime;
+
+	void fiber_routine();
+#ifdef _WIN3212
+	HANDLE m_fiber;
 
 	static void WINAPI s_fiber_routine(LPVOID p) {
 		reinterpret_cast<coroutine*>(p)->fiber_routine();
 	}
-	void fiber_routine();
 #else
 	ucontext_t m_ctx;
 	char *stack;
+	static void s_fiber_routine(uint32_t low32, uint32_t hi32);
 #endif
 	friend class coroutine_schedule;
 };
