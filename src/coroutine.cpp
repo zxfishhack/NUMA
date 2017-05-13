@@ -20,7 +20,7 @@ void coroutine::yield() {
 
 void coroutine::fiber_routine() {
 	while(!m_Exit) {
-		m_func(this, m_ud);
+		m_func(m_ud);
 		m_status = coroutine::READY;
 		yield();
 	}

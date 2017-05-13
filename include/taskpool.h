@@ -37,6 +37,10 @@ public:
 		m_tasks.resize(maxThread);
 		int CPUIdx = 0;
 		for(int i=0; i<maxThread; i++) {
+			m_lock.push_back(new sys::Mutex);
+			m_sem.push_back(new sys::Semaphore);
+		}
+		for(int i=0; i<maxThread; i++) {
 			KAFFINITY mask = 1;
 			while (((mask << (CPUIdx % 64)) & affinityMask) == 0) {
 				CPUIdx++;
@@ -44,8 +48,6 @@ public:
 			mask <<= CPUIdx;
 			CPUIdx++;
 			m_threads.push_back(new Thread(s_routine, this, coroutine_schedule::STACK_SIZE, mask));
-			m_lock.push_back(new sys::Mutex);
-			m_sem.push_back(new sys::Semaphore);
 		}
 	}
 	~Pool() {
@@ -124,7 +126,9 @@ public:
 	void join() {
 		m_Exit = true;
 		for(int i=0; i<m_threadCount; i++) {
-			m_sem[i]->up();
+			m_sem[i]->up(m_threadCount);
+		}
+		for(int i=0; i<m_threadCount; i++) {
 			m_threads[i]->join();
 		}
 	}
@@ -153,6 +157,7 @@ private:
 		}
 		coroutine_schedule cs;
 		curSchedule.set(&cs);
+		idx--;
 		while(!m_Exit) {
 			coroutine* task = NULL;
 			// 从当前任务队列中找出

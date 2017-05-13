@@ -14,7 +14,7 @@ NUMAExecutorGroup::NUMAExecutorGroup(int NUMANode, KAFFINITY affinity)
 	}
 	m_thrCount = cnt;
 	m_memPool = new memPoolType(NUMANode);
-	m_taskPool = new Task::Pool(cnt / 2, affinity, s_thread_init, this);
+	m_taskPool = new Task::Pool(cnt, affinity, s_thread_init, this);
 }
 
 NUMAExecutorGroup::~NUMAExecutorGroup(void)
@@ -26,8 +26,8 @@ NUMAExecutorGroup::~NUMAExecutorGroup(void)
 
 void NUMAExecutorGroup::s_thread_init(void *ctx, int) {
 	NUMAExecutorGroup* self = reinterpret_cast<NUMAExecutorGroup *>(ctx);
-	curMemPool.set(self->m_memPool);
+	curExecutorGroup.set(self);
 }
 
 
-ThreadLocal<memPoolType*> NUMAExecutorGroup::curMemPool;
+ThreadLocal<NUMAExecutorGroup*> curExecutorGroup;
