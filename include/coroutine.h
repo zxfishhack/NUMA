@@ -38,9 +38,9 @@ private:
 	volatile coroutine_func_t m_func;
 	void * m_ud;
 	status_t m_status;
+	bool m_Exit;
 #ifdef _WIN32
 	HANDLE m_fiber;
-	bool m_Exit;
 	int m_initTime;
 
 	static void WINAPI s_fiber_routine(LPVOID p) {
@@ -48,7 +48,8 @@ private:
 	}
 	void fiber_routine();
 #else
-
+	ucontext_t m_ctx;
+	char *stack;
 #endif
 	friend class coroutine_schedule;
 };
@@ -69,6 +70,7 @@ private:
 	HANDLE m_fiber;
 #else
 	ucontext_t main;
+	char stack[STACK_SIZE];
 #endif
 };
 

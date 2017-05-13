@@ -73,5 +73,19 @@ void coroutine_schedule::resume(coroutine* co) {
 	::SwitchToFiber(co->m_fiber);
 }
 
+#else
+
+coroutine::coroutine(coroutine_func_t func, void* ud)
+	: m_func(func)
+	, m_ud(ud)
+	, m_Exit(false)
+{
+	stack = new char[coroutine_schedule::STACK_SIZE];
+}
+
+coroutine::~coroutine() {
+	delete []stack;
+}
+
 #endif
 
