@@ -60,7 +60,6 @@ public:
 	void* alloc(size_t c) {
 		size_t size = MEM_ALIGN(c, boundary);
 		MemNode* cur = m_freeList;
-		m_reqSize += c;
 		while(cur && size > cur->size()) {
 			cur = cur->next;
 		}
@@ -77,10 +76,8 @@ public:
 			} else {
 				m_freeList = cur->next;
 			}
-			m_allocedSize += cur->size();
 			return cur->start;
 		}
-		m_allocedSize += size;
 		// 分离结点，在未使用区间上分配管理结点进行记录
 		MemNode * newNode = reinterpret_cast<MemNode*>(cur->start + size);
 		newNode->prev = cur->prev;

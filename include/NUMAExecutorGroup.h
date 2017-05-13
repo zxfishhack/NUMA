@@ -4,6 +4,9 @@
 
 typedef ThreadSafePool<VariableSizePool<FixedSizePool<256*1024*1024>>, Task::sys::Mutex> memPoolType;
 
+class NUMAExecutorGroup;
+extern ThreadLocal<NUMAExecutorGroup*> curExecutorGroup;
+
 class NUMAExecutorGroup
 {
 public:
@@ -24,8 +27,8 @@ public:
 		return *m_taskPool;
 	}
 
-	static memPoolType* memPool() {
-		return curMemPool.get();
+	memPoolType* memPool() const {
+		return m_memPool;
 	}
 	int m_thrCount;
 	int m_NUMANode;
@@ -34,8 +37,6 @@ private:
 	Task::Thread *m_thread;
 	memPoolType * m_memPool;
 	Task::Pool *m_taskPool;
-
-	static ThreadLocal<memPoolType*> curMemPool;
 
 	static void s_thread_init(void * ctx, int);
 };

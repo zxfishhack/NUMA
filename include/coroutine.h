@@ -8,7 +8,7 @@
 
 class coroutine_schedule;
 class coroutine;
-typedef void(*coroutine_func_t)(coroutine* self, void* ud);
+typedef void(*coroutine_func_t)(void* ud);
 
 class coroutine {
 public:
