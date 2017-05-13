@@ -3,12 +3,12 @@ include $(MODULE).pro
 include $(PROJECT_ROOT_PATH)/makerules/common_header.mk
 
 # local flag define
-INCLUDE += 
-CXX_OPTS +=
+INCLUDE += -I$(PROJECT_ROOT_PATH)/include
+CXX_OPTS += -std=c++11
 CC_OPTS +=
 OPTI_OPTS +=
 DEFINE +=
-LD_OPTS += 
+LD_OPTS += -lnuma-eg -lnuma
 AR_OPTS +=
 
 include $(PROJECT_ROOT_PATH)/makerules/common_footer.mk

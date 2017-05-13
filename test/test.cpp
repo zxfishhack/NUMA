@@ -1,6 +1,7 @@
 
 #include "NUMAExecutorGroup.h"
 #include <string>
+#include <vector>
 
 struct CalcContext {
 	int start;
@@ -39,7 +40,7 @@ void test_routine(void *ctx) {
 		sem.down();
 	}
 	double result = 0;
-	for(auto i = ccs.begin(); i != ccs.end(); ++i) {
+	for(std::vector<CalcContext*>::iterator i = ccs.begin(); i != ccs.end(); ++i) {
 		result += (*i)->result;
 	}
 	std::cout << result << std::endl;
