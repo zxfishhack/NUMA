@@ -1,13 +1,9 @@
 #ifndef _TASK_POOL_H_
 #define _TASK_POOL_H_
-#ifdef WIN32
-#include <Windows.h>
-#endif
 #include "mempool.h"
 #include "coroutine.h"
 #include <deque>
 #include <map>
-#include <process.h>
 #include <cassert>
 #include <queue>
 #include <ostream>
@@ -39,11 +35,9 @@ public:
 	{
 		assert(maxThread > 0);
 		m_tasks.resize(maxThread);
-		SYSTEM_INFO si;
-		GetSystemInfo(&si);
-		DWORD CPUIdx = 0;
+		int CPUIdx = 0;
 		for(int i=0; i<maxThread; i++) {
-			DWORD_PTR mask = 1;
+			KAFFINITY mask = 1;
 			while (((mask << (CPUIdx % 64)) & affinityMask) == 0) {
 				CPUIdx++;
 			}
@@ -56,7 +50,7 @@ public:
 	}
 	~Pool() {
 		join();
-		for(int i=0; i<m_threads.size(); i++) {
+		for(size_t i=0; i<m_threads.size(); i++) {
 			delete m_threads[i];
 		}
 	}

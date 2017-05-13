@@ -17,8 +17,8 @@ namespace Task {
 		public:
 			Mutex();
 			~Mutex();
-			void lock() const;
-			void unlock() const;
+			void lock();
+			void unlock();
 		private:
 #ifdef _WIN32
 			HANDLE m_mutex;
@@ -33,10 +33,10 @@ namespace Task {
 		inline Mutex::~Mutex() {
 			::CloseHandle(m_mutex);
 		}
-		inline void Mutex::lock() const {
+		inline void Mutex::lock() {
 			::WaitForSingleObject(m_mutex, INFINITE);
 		}
-		inline void Mutex::unlock() const {
+		inline void Mutex::unlock() {
 			::ReleaseMutex(m_mutex);
 		}
 
@@ -47,13 +47,13 @@ namespace Task {
 			pthread_mutex_init(&m_mutex, &attr);
 		}
 		inline Mutex::~Mutex() {
-			pthread_mutex_destory(m_mutex);
+			pthread_mutex_destroy(&m_mutex);
 		}
-		inline void Mutex::lock() const {
-			pthread_mutex_lock(m_mutex);
+		inline void Mutex::lock() {
+			pthread_mutex_lock(&m_mutex);
 		}
-		inline void Mutex::unlock() const {
-			pthread_mutex_unlock(m_mutex);
+		inline void Mutex::unlock() {
+			pthread_mutex_unlock(&m_mutex);
 		}
 #endif
 		class Semaphore : public noncopyable {

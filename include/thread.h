@@ -28,11 +28,11 @@ namespace Task {
 			pthread_attr_init(&attr);
 			if (affininity) {
 				cpu_set_t cpu_info;
-				__CPU_ZERO(&cpu_info);
+				CPU_ZERO(&cpu_info);
 				KAFFINITY _1(1);
-				for (int i = 0; i<sizeof(affininity) * 8; i++) {
+				for (size_t i = 0; i<sizeof(affininity) * 8; i++) {
 					if ((_1 << i) & affininity) {
-						__CPU_SET(i, &cpu_info);
+						CPU_SET(i, &cpu_info);
 					}
 				}
 				pthread_attr_setaffinity_np(&attr, sizeof(cpu_info), &cpu_info);

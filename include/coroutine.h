@@ -3,6 +3,8 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#else
+#include <ucontext.h>
 #endif
 #include "localstorage.h"
 

@@ -6,7 +6,7 @@ NUMAExecutorGroup::NUMAExecutorGroup(int NUMANode, KAFFINITY affinity)
 	, m_affinity(affinity)
 {
 	int cnt = 0;
-	DWORD_PTR _1 = 1;
+	KAFFINITY _1 = 1;
 	for(int i=0; i<64; i++) {
 		if (affinity & (_1<<i)) {
 			cnt ++;

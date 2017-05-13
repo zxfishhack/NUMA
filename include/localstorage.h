@@ -1,7 +1,7 @@
 #ifndef _NUMA_LOCAL_STORAGE_H_
 #define _NUMA_LOCAL_STORAGE_H_
 
-#include <exception>
+#include <new>
 
 #ifdef _WIN32
 
@@ -30,6 +30,7 @@ private:
 };
 
 #else
+#include <pthread.h>
 
 template<typename Ty>
 class ThreadLocal {
@@ -43,7 +44,7 @@ public:
 		pthread_key_delete(m_key);
 	}
 	void set(Ty p) const {
-		pthread_setspecific(m_key, LPVOID(p));
+		pthread_setspecific(m_key, (const void*)p);
 	}
 	Ty get() const {
 		return Ty(pthread_getspecific(m_key));
