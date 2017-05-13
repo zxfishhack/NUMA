@@ -11,4 +11,41 @@
       <UniqueIdentifier>{36b1a58c-0136-4739-9546-34e9b2020173}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\mempool.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\coroutine.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\noncopyable.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\NUMAExecutorGroup.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\taskpool.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\localstorage.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\sync.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\thread.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\coroutine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\NUMAExecutorGroup.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\taskpool.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
