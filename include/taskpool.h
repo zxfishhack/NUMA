@@ -158,6 +158,7 @@ private:
 		coroutine_schedule cs;
 		curSchedule.set(&cs);
 		idx--;
+		curPool.set(this);
 		while(!m_Exit) {
 			coroutine* task = NULL;
 			// 从当前任务队列中找出
