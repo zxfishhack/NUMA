@@ -47,7 +47,7 @@ void test_routine(void *ctx) {
 }
 
 int main() {
-	NUMAExecutorGroup eg(0, 0xff & 0x55555);
+	NUMAExecutorGroup eg(0, 0xf & 0x55555);
 	eg.Run(test_routine, &eg);
 
 	std::string line;

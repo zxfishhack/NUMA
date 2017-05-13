@@ -43,7 +43,7 @@ private:
 	int m_initTime;
 
 	void fiber_routine();
-#ifdef _WIN3212
+#ifdef _WIN32
 	HANDLE m_fiber;
 
 	static void WINAPI s_fiber_routine(LPVOID p) {
@@ -73,7 +73,7 @@ private:
 	HANDLE m_fiber;
 #else
 	ucontext_t main;
-	char stack[STACK_SIZE];
+	char *stack;
 #endif
 };
 

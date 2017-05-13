@@ -26,7 +26,7 @@ void coroutine::fiber_routine() {
 	yield();
 }
 
-#ifdef _WIN3212
+#ifdef _WIN32
 
 coroutine::coroutine(coroutine_func_t func, void* ud)
 	: m_func(func)
@@ -84,9 +84,10 @@ coroutine::coroutine(coroutine_func_t func, void* ud)
 	stack = new char[coroutine_schedule::STACK_SIZE];
 	getcontext(&m_ctx);
 	m_ctx.uc_stack.ss_sp = stack;
-	m_ctx.uc_stack.ss_size = STACK_SIZE;
+	m_ctx.uc_stack.ss_size = coroutine_schedule::STACK_SIZE;
 	m_ctx.uc_link = NULL;
-	makecontext(&co->ctx, corutine::s_fiber_routine, 2, (uint32_t)this, (uint32_t)(this >> 32));
+	uintptr_t ptr = (uintptr_t)this;
+	makecontext(&m_ctx, (void(*)(void))coroutine::s_fiber_routine, 2, (uint32_t)ptr, (uint32_t)(ptr >> 32));
 }
 
 coroutine::~coroutine() {
@@ -100,9 +101,11 @@ void coroutine::s_fiber_routine(uint32_t low32, uint32_t hi32) {
 
 coroutine_schedule::coroutine_schedule()
 	: m_running(NULL) {
+	stack = new char[STACK_SIZE];
 }
 
 coroutine_schedule::~coroutine_schedule() {
+	delete []stack;
 }
 
 void coroutine_schedule::yield(coroutine* co) const {
@@ -114,7 +117,7 @@ void coroutine_schedule::yield(coroutine* co) const {
 	default:
 		co->m_status = coroutine::SUSPEND;
 	}
-	swap_context(&co->m_ctx, &main);
+	swapcontext(&co->m_ctx, &main);
 }
 
 void coroutine_schedule::resume(coroutine* co) {
@@ -122,7 +125,7 @@ void coroutine_schedule::resume(coroutine* co) {
 	co->m_schedule = this;
 	m_running = co;
 	
-	swap_context(&main, co->m_ctx);
+	swapcontext(&main, &co->m_ctx);
 }
 
 #endif
